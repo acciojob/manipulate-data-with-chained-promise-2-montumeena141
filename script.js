@@ -16,7 +16,7 @@ function manipulateArray() {
                 const evenNumbers = arr.filter(num => num % 2 === 0);
                 output.innerText = evenNumbers.join(", ");
                 resolve(evenNumbers);
-            }, 3000);
+            }, 000);
         });
     })
     .then(evenNumbers => {
