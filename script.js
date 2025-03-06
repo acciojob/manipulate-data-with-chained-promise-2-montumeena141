@@ -1,32 +1,27 @@
-document.getElementById("startBtn").addEventListener("click", manipulateArray);
+document.addEventListener("DOMContentLoaded", () => {
+    let output = document.getElementById("output");
 
-function manipulateArray() {
-    const output = document.getElementById("output");
-    output.innerText = "Processing...";
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-    // Step 1: Create a Promise that resolves with the array after 3 seconds
+    function updateOutput(content) {
+        output.innerText = content;  // Update the output div
+    }
+
+    // Initial Promise (Resolves after 3 seconds)
     new Promise(resolve => {
-        setTimeout(() => {
-            resolve([1, 2, 3, 4]);
-        }, 3000);
+        setTimeout(() => resolve([1, 2, 3, 4]), 3000);
     })
-    .then(arr => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const evenNumbers = arr.filter(num => num % 2 === 0);
-                output.innerText = evenNumbers.join(", ");
-                resolve(evenNumbers);
-            }, 1000);
-        });
+    .then(async (arr) => {
+        await delay(1000);  // Wait 1 second before filtering out odd numbers
+        let filtered = arr.filter(num => num % 2 === 0);
+        updateOutput(filtered.join(","));  // Should show "2,4"
+        return filtered;
     })
-    .then(evenNumbers => {
-        // Step 3: Multiply even numbers by 2 after another 2 seconds
-        return new Promise(resolve => {
-            setTimeout(() => {
-                const doubledNumbers = evenNumbers.map(num => num * 2);
-                output.innerText = doubledNumbers.join(", ");
-                resolve(doubledNumbers);
-            }, 2000);
-        });
+    .then(async (filteredArr) => {
+        await delay(2000);  // Wait 2 more seconds before multiplying by 2
+        let transformed = filteredArr.map(num => num * 2);
+        updateOutput(transformed.join(","));  // Should show "4,8"
     });
-}
+});
